@@ -1,111 +1,136 @@
-# MCP Simple Chatbot
+# 🧠 IntelliSynth: Autonomous Research Collaborator
 
-This example demonstrates how to integrate the Model Context Protocol (MCP) into a simple CLI chatbot. The implementation showcases MCP's flexibility by supporting multiple tools through MCP servers and is compatible with any LLM provider that follows OpenAI API standards.
+## 📘 Project Summary
 
-## Requirements
+**IntelliSynth** is a collaborative AI system designed to tackle research-oriented queries by distributing tasks among intelligent digital agents. Each agent focuses on a distinct aspect of the problem—ranging from fact-gathering to analysis—and contributes to a unified, in-depth report. This makes IntelliSynth an ideal tool for analysts, students, and knowledge professionals who require efficient and structured research support.
 
-- Python 3.10
-- `python-dotenv`
-- `requests`
-- `mcp`
-- `uvicorn`
+---
 
-## Installation
+## 🌟 Core Capabilities
 
-1. **Install the dependencies:**
+- **Adaptive Topic Analysis**: Automatically identifies key components of a research question.
+- **Agent-Based Task Allocation**: Assigns different responsibilities to specialized sub-agents.
+- **Multimodel Processing**: Integrates both OpenAI and Claude APIs for diverse reasoning.
+- **Knowledge Fusion**: Combines outputs from all agents to form a cohesive narrative.
+- **Human-Readable Summaries**: Presents results in a clear, structured, and actionable format.
+- **Console Insight Visuals**: Offers enhanced CLI feedback using `Rich` for transparent execution.
+
+---
+
+## 🗂 Project Layout
+
+```
+IntelliSynth/
+├── core_engine.py           # Main logic for agent interactions
+├── launcher.py              # CLI entry script
+├── session_output.json      # Logs and results from agent responses
+├── .env                     # Secure storage for API keys
+├── requirements.txt         # Python dependencies
+└── README.md                # Project documentation
+```
+
+---
+
+## ⚙️ Setup Instructions
+
+1. **Install dependencies**:
 
    ```bash
    pip install -r requirements.txt
    ```
 
-2. **Set up environment variables:**
+2. **Add your API keys** in the `.env` file:
 
-   Create a `.env` file in the root directory and add your API key:
-
-   ```plaintext
-   LLM_API_KEY=your_api_key_here
-   ```
-   **Note:** The current implementation is configured to use the Groq API endpoint (`https://api.groq.com/openai/v1/chat/completions`) with the `llama-3.2-90b-vision-preview` model. If you plan to use a different LLM provider, you'll need to modify the `LLMClient` class in `main.py` to use the appropriate endpoint URL and model parameters.
-
-3. **Configure servers:**
-
-   The `servers_config.json` follows the same structure as Claude Desktop, allowing for easy integration of multiple servers. 
-   Here's an example:
-
-   ```json
-   {
-     "mcpServers": {
-       "sqlite": {
-         "command": "uvx",
-         "args": ["mcp-server-sqlite", "--db-path", "./test.db"]
-       },
-       "puppeteer": {
-         "command": "npx",
-         "args": ["-y", "@modelcontextprotocol/server-puppeteer"]
-       }
-     }
-   }
-   ```
-   Environment variables are supported as well. Pass them as you would with the Claude Desktop App.
-
-   Example:
-   ```json
-   {
-     "mcpServers": {
-       "server_name": {
-         "command": "uvx",
-         "args": ["mcp-server-name", "--additional-args"],
-         "env": {
-           "API_KEY": "your_api_key_here"
-         }
-       }
-     }
-   }
+   ```env
+   OPENAI_API_KEY=your_openai_key
+   CLAUDE_API_KEY=your_claude_key
    ```
 
-## Usage
-
-1. **Run the client:**
+3. **Launch the application**:
 
    ```bash
-   python main.py
+   python launcher.py
    ```
 
-2. **Interact with the assistant:**
-   
-   The assistant will automatically detect available tools and can respond to queries based on the tools provided by the configured servers.
+4. **Input a research topic** to receive a comprehensive analysis report.
 
-3. **Exit the session:**
+---
 
-   Type `quit` or `exit` to end the session.
+## 🧬 System Workflow
 
-## Architecture
+### 🔄 Operational Flow
 
-- **Tool Discovery**: Tools are automatically discovered from configured servers.
-- **System Prompt**: Tools are dynamically included in the system prompt, allowing the LLM to understand available capabilities.
-- **Server Integration**: Supports any MCP-compatible server, tested with various server implementations including Uvicorn and Node.js.
+The system operates through a sequence of coordinated agent tasks:
 
-### Class Structure
-- **Configuration**: Manages environment variables and server configurations
-- **Server**: Handles MCP server initialization, tool discovery, and execution
-- **Tool**: Represents individual tools with their properties and formatting
-- **LLMClient**: Manages communication with the LLM provider
-- **ChatSession**: Orchestrates the interaction between user, LLM, and tools
+1. **Input Intake**: Accepts a broad research question.
+2. **Decomposition Module**: Breaks the topic into sub-questions.
+3. **Agent Orchestration**: Assigns each subtask to a dedicated AI agent.
+4. **Independent Processing**: Each agent queries an LLM (OpenAI/Claude).
+5. **Result Aggregation**: Synthesizes all outputs into a unified summary.
 
-### Logic Flow
+---
 
-1. **Tool Integration**:
-   - Tools are dynamically discovered from MCP servers
-   - Tool descriptions are automatically included in system prompt
-   - Tool execution is handled through standardized MCP protocol
+## 🔑 Modules Overview
 
-2. **Runtime Flow**:
-   - User input is received
-   - Input is sent to LLM with context of available tools
-   - LLM response is parsed:
-     - If it's a tool call → execute tool and return result
-     - If it's a direct response → return to user
-   - Tool results are sent back to LLM for interpretation
-   - Final response is presented to user
+- **Input Handler**: Manages user input and query pre-processing.
+- **Task Splitter**: Analyzes and divides the topic into 3–5 actionable tasks.
+- **Agent Fabricator**: Generates specific agent instances with tailored objectives.
+- **Execution Core**: Routes subtasks to LLMs and handles agent lifecycle.
+- **Synthesizer**: Merges responses into a final report with contextual linking.
 
+---
 
+## 🧰 Technology Stack
+
+- **Python** – Core programming language
+- **LangChain** – Agent management and LLM coordination
+- **OpenAI & Claude APIs** – Natural language model backends
+- **Rich** – CLI interface for execution logs
+- **Dotenv** – Secure API key management
+
+---
+
+## 🔁 Visual Workflow
+
+```
+User Input
+   ↓
+Topic Breakdown
+   ↓
+Agent Assignment
+   ↓
+Task Execution via LLMs
+   ↓
+Results Merged
+   ↓
+Structured Output (Console + JSON)
+```
+
+---
+
+## 👥 Contributing
+
+We welcome contributions from developers, researchers, and AI enthusiasts:
+
+1. Fork this repository
+2. Create your feature branch:
+   ```bash
+   git checkout -b <branch-name>
+   ```
+3. Commit your changes:
+   ```bash
+   git commit -m "Commit comments"
+   ```
+4. Push to the branch:
+   ```bash
+   git push origin <branch-name>
+   ```
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License**. You are free to use, modify, and distribute it as per the license terms.
+
+---
