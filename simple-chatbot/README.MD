@@ -131,6 +131,6 @@ We welcome contributions from developers, researchers, and AI enthusiasts:
 
 ## 📄 License
 
-This project is licensed under the **MIT License**. You are free to use, modify, and distribute it as per the license terms.
+This project is licensed under the **MIT License**. You are free to use, modify, and distribute it as per the license terms. 
 
 ---
